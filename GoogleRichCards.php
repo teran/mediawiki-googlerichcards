@@ -24,7 +24,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 function GoogleRichCards(&$out) {
     global $wgLogo, $wgServer, $wgSitename, $wgTitle;
-    if($wgTitle->isContentPage() && !$wgTitle->isSpecial()) {
+    if($wgTitle instanceof Title && $wgTitle->isContentPage()) {
       $ctime = DateTime::createFromFormat('YmdHis', $wgTitle->getEarliestRevTime());
       $mtime = DateTime::createFromFormat('YmdHis', $wgTitle->getTouched());
       if($ctime) {
@@ -48,8 +48,7 @@ function GoogleRichCards(&$out) {
       }
 
       $image = key($out->getFileSearchOptions());
-      if($image) {
-        $image_object = wfFindFile($image);
+      if($image && $image_object = wfFindFile($image)) {
 
         $image_url = $image_object->getFullURL();
         $image_width = $image_object->getWidth();
