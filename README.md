@@ -15,7 +15,7 @@ The extension adds Google Rich Card JSON-LD metadata to each "content page" of y
              },
              "author": {
                "@type": "Person",
-               "name": "Teran"
+               "name": "<first revision author>"
               },
              "headline": "<current page title>",
              "dateCreated": "2016-05-04T08:20:51+00:00",
