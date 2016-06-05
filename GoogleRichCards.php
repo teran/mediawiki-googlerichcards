@@ -22,13 +22,43 @@ if ( !defined( 'MEDIAWIKI' ) ) {
   die(1);
 }
 
-function GoogleRichCards(&$out)
-{
+function GoogleRichCards(&$out) {
     global $wgLogo, $wgServer, $wgSitename, $wgTitle;
-    if($wgTitle->isContentPage()) {
-      $created_timestamp = DateTime::createFromFormat('YmdHis', $wgTitle->getEarliestRevTime());
-      $modified_timestamp = DateTime::createFromFormat('YmdHis', $wgTitle->getTouched());
-      $author = $wgTitle->getFirstRevision()->getUserText();
+    if($wgTitle->isContentPage() && !$wgTitle->isSpecial()) {
+      $ctime = DateTime::createFromFormat('YmdHis', $wgTitle->getEarliestRevTime());
+      $mtime = DateTime::createFromFormat('YmdHis', $wgTitle->getTouched());
+      if($ctime) {
+        $created_timestamp = $ctime->format('c');
+      } else {
+        $created_timestamp = '0';
+      }
+
+      if($mtime) {
+        $modified_timestamp = $mtime->format('c');
+      } else {
+        $modified_timestamp = '0';
+      }
+
+
+      $first_revision = $wgTitle->getFirstRevision();
+      if($first_revision) {
+        $author = $first_revision->getUserText();
+      } else {
+        $author = 'None';
+      }
+
+      $image = key($out->getFileSearchOptions());
+      if($image) {
+        $image_object = wfFindFile($image);
+
+        $image_url = $image_object->getFullURL();
+        $image_width = $image_object->getWidth();
+        $image_height = $image_object->getHeight();
+      } else {
+        $image_url = $wgServer.$wgLogo; // Mediawiki logo to be used by default
+        $image_width = 135; // Default max logo width
+        $image_height = 135; // Default max logo height
+      }
 
       $out->addHeadItem(
           'GoogleRichCards',
@@ -45,15 +75,15 @@ function GoogleRichCards(&$out)
                "name": "'.$author.'"
              },
              "headline": "'.$wgTitle.'",
-             "dateCreated": "'.$created_timestamp->format('c').'",
-             "datePublished": "'.$created_timestamp->format('c').'",
-             "dateModified": "'.$modified_timestamp->format('c').'",
+             "dateCreated": "'.$created_timestamp.'",
+             "datePublished": "'.$created_timestamp.'",
+             "dateModified": "'.$modified_timestamp.'",
              "discussionUrl": "'.$wgServer.'/'.$wgTitle->getTalkPage().'",
              "image": {
                "@type": "ImageObject",
-               "url": "'.$wgServer.$wgLogo.'",
-               "height": 135,
-               "width": 135
+               "url": "'.$image_url.'",
+               "height": '.$image_height.',
+               "width": '.$image_width.'
              },
              "publisher": {
                "@type": "Organization",

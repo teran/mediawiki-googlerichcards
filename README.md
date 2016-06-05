@@ -26,9 +26,9 @@ The extension adds Google Rich Card JSON-LD metadata to each "content page" of y
      "dateModified": "2016-06-05T01:12:10+00:00",
      "image": {
        "@type": "ImageObject",
-       "url": "<logo url made of $wgServer + $wgLogo>",
-       "height": 135, // since 135x135 is the max default value for mediawiki logo
-       "width": 135
+       "url": "<article image>",
+       "height": <height>,
+       "width": <width>
      },
      "publisher": {
        "@type": "Organization",
