@@ -49,6 +49,12 @@ function GoogleRichCards(&$out)
              "datePublished": "'.$created_timestamp->format('c').'",
              "dateModified": "'.$modified_timestamp->format('c').'",
              "discussionUrl": "'.$wgServer.'/'.$wgTitle->getTalkPage().'",
+             "image": {
+               "@type": "ImageObject",
+               "url": "'.$wgServer.$wgLogo.'",
+               "height": 135,
+               "width": 135
+             },
              "publisher": {
                "@type": "Organization",
                "name": "'.$wgSitename.'",
