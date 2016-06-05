@@ -27,6 +27,7 @@ function GoogleRichCards(&$out)
     global $wgLogo, $wgServer, $wgSitename, $wgTitle;
     if($wgTitle->isContentPage()) {
       $created_timestamp = DateTime::createFromFormat('YmdHis', $wgTitle->getEarliestRevTime());
+      $author = $wgTitle->getFirstRevision()->getUserText();
 
       $out->addHeadItem(
           'GoogleRichCards',
@@ -37,6 +38,10 @@ function GoogleRichCards(&$out)
              "mainEntityOfPage": {
                "@type": "WebPage",
                "@id": "'.$wgTitle->getFullURL().'"
+             },
+             "author": {
+               "@type": "Person",
+               "name": "'.$author.'"
              },
              "headline": "'.$wgTitle.'",
              "dateCreated": "'.$created_timestamp->format('c').'",
