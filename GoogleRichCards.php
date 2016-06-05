@@ -27,6 +27,7 @@ function GoogleRichCards(&$out)
     global $wgLogo, $wgServer, $wgSitename, $wgTitle;
     if($wgTitle->isContentPage()) {
       $created_timestamp = DateTime::createFromFormat('YmdHis', $wgTitle->getEarliestRevTime());
+      $modified_timestamp = DateTime::createFromFormat('YmdHis', $wgTitle->getTouched());
       $author = $wgTitle->getFirstRevision()->getUserText();
 
       $out->addHeadItem(
@@ -46,6 +47,7 @@ function GoogleRichCards(&$out)
              "headline": "'.$wgTitle.'",
              "dateCreated": "'.$created_timestamp->format('c').'",
              "datePublished": "'.$created_timestamp->format('c').'",
+             "dateModified": "'.$modified_timestamp->format('c').'",
              "discussionUrl": "'.$wgServer.'/'.$wgTitle->getTalkPage().'",
              "publisher": {
                "@type": "Organization",
