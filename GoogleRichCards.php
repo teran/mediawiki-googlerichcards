@@ -22,7 +22,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
   die(1);
 }
 
-function GoogleRichCards(&$out) {
+function GoogleRichCardsArticle(&$out) {
   global $wgLogo, $wgServer, $wgSitename, $wgTitle;
   if($wgTitle instanceof Title && $wgTitle->isContentPage()) {
     $ctime = DateTime::createFromFormat('YmdHis', $wgTitle->getEarliestRevTime());
@@ -92,12 +92,12 @@ function GoogleRichCards(&$out) {
     );
 
     $out->addHeadItem(
-      'GoogleRichCards',
+      'GoogleRichCardsArticle',
       '<script type="application/ld+json">'.json_encode($article).'</script>'
     );
   }
 }
 
-$wgHooks['BeforePageDisplay'][] = 'GoogleRichCards';
+$wgHooks['BeforePageDisplay'][] = 'GoogleRichCardsArticle';
 
 ?>
