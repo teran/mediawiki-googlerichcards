@@ -12,9 +12,9 @@
  * @link     https://github.com/teran/mediawiki-GoogleRichCards
  * */
 $wgExtensionCredits['validextensionclass'][] = array(
-   'name' => 'GoogleRichCards',
-   'author' =>'Igor Shishkin',
-   'url' => 'https://github.com/teran/mediawiki-GoogleRichCards'
+  'name' => 'GoogleRichCards',
+  'author' =>'Igor Shishkin',
+  'url' => 'https://github.com/teran/mediawiki-GoogleRichCards'
 );
 
 if ( !defined( 'MEDIAWIKI' ) ) {
@@ -23,79 +23,79 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 }
 
 function GoogleRichCards(&$out) {
-    global $wgLogo, $wgServer, $wgSitename, $wgTitle;
-    if($wgTitle instanceof Title && $wgTitle->isContentPage()) {
-      $ctime = DateTime::createFromFormat('YmdHis', $wgTitle->getEarliestRevTime());
-      $mtime = DateTime::createFromFormat('YmdHis', $wgTitle->getTouched());
-      if($ctime) {
-        $created_timestamp = $ctime->format('c');
-      } else {
-        $created_timestamp = '0';
-      }
+  global $wgLogo, $wgServer, $wgSitename, $wgTitle;
+  if($wgTitle instanceof Title && $wgTitle->isContentPage()) {
+    $ctime = DateTime::createFromFormat('YmdHis', $wgTitle->getEarliestRevTime());
+    $mtime = DateTime::createFromFormat('YmdHis', $wgTitle->getTouched());
+    if($ctime) {
+      $created_timestamp = $ctime->format('c');
+    } else {
+      $created_timestamp = '0';
+    }
 
-      if($mtime) {
-        $modified_timestamp = $mtime->format('c');
-      } else {
-        $modified_timestamp = '0';
-      }
+    if($mtime) {
+      $modified_timestamp = $mtime->format('c');
+    } else {
+      $modified_timestamp = '0';
+    }
 
 
-      $first_revision = $wgTitle->getFirstRevision();
-      if($first_revision) {
-        $author = $first_revision->getUserText();
-      } else {
-        $author = 'None';
-      }
+    $first_revision = $wgTitle->getFirstRevision();
+    if($first_revision) {
+      $author = $first_revision->getUserText();
+    } else {
+      $author = 'None';
+    }
 
-      $image = key($out->getFileSearchOptions());
-      if($image && $image_object = wfFindFile($image)) {
+    $image = key($out->getFileSearchOptions());
+    if($image && $image_object = wfFindFile($image)) {
+      $image_url = $image_object->getFullURL();
+      $image_width = $image_object->getWidth();
+      $image_height = $image_object->getHeight();
+    } else {
+      $image_url = $wgServer.$wgLogo; // Mediawiki logo to be used by default
+      $image_width = 135; // Default max logo width
+      $image_height = 135; // Default max logo height
+    }
 
-        $image_url = $image_object->getFullURL();
-        $image_width = $image_object->getWidth();
-        $image_height = $image_object->getHeight();
-      } else {
-        $image_url = $wgServer.$wgLogo; // Mediawiki logo to be used by default
-        $image_width = 135; // Default max logo width
-        $image_height = 135; // Default max logo height
-      }
-
-      $article = array(
-        '@context'         => 'http://schema.org',
-        '@type'            => 'Article',
-        'mainEntityOfPage' => array(
-          '@type' => 'WebPage',
-          '@id'   => $wgTitle->getFullURL(),
+    $article = array(
+      '@context'         => 'http://schema.org',
+      '@type'            => 'Article',
+      'mainEntityOfPage' => array(
+        '@type' => 'WebPage',
+        '@id'   => $wgTitle->getFullURL(),
+      ),
+      'author'           => array(
+        '@type' => 'Person',
+        'name'  => $author,
+      ),
+      'headline'         => $wgTitle->getText(),
+      'dateCreated'      => $created_timestamp,
+      'datePublished'    => $created_timestamp,
+      'dateModified'     => $modified_timestamp,
+      'discussionUrl'    => $wgServer.'/'.$wgTitle->getTalkPage(),
+      'image'            => array(
+        '@type'  => 'ImageObject',
+        'url'    => $image_url,
+        'height' => $image_height,
+        'width'  => $image_width,
+      ),
+      'publisher'        => array(
+        '@type' => 'Organization',
+        'name'  => $wgSitename,
+        'logo'  => array(
+          '@type' => 'ImageObject',
+          'url'   => $wgServer.$wgLogo,
         ),
-        'author'           => array(
-          '@type' => 'Person',
-          'name'  => $author,
-        ),
-        'headline'         => $wgTitle->getText(),
-        'dateCreated'      => $created_timestamp,
-        'datePublished'    => $created_timestamp,
-        'dateModified'     => $modified_timestamp,
-        'discussionUrl'    => $wgServer.'/'.$wgTitle->getTalkPage(),
-        'image'            => array(
-          '@type'  => 'ImageObject',
-          'url'    => $image_url,
-          'height' => $image_height,
-          'width'  => $image_width,
-        ),
-        'publisher'        => array(
-          '@type' => 'Organization',
-          'name'  => $wgSitename,
-          'logo'  => array(
-            '@type' => 'ImageObject',
-            'url'   => $wgServer.$wgLogo,
-          ),
-        ),
-        'description'      => $wgTitle->getText(),
-      );
+      ),
+      'description'      => $wgTitle->getText(),
+    );
 
-      $out->addHeadItem(
-          'GoogleRichCards',
-          '<script type="application/ld+json">'.json_encode($article).'</script>');
-         }
+    $out->addHeadItem(
+      'GoogleRichCards',
+      '<script type="application/ld+json">'.json_encode($article).'</script>'
+    );
+  }
 }
 
 $wgHooks['BeforePageDisplay'][] = 'GoogleRichCards';
