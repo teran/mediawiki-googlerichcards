@@ -59,42 +59,42 @@ function GoogleRichCards(&$out) {
         $image_height = 135; // Default max logo height
       }
 
+      $article = array(
+        '@context'         => 'http://schema.org',
+        '@type'            => 'Article',
+        'mainEntityOfPage' => array(
+          '@type' => 'WebPage',
+          '@id'   => $wgTitle->getFullURL(),
+        ),
+        'author'           => array(
+          '@type' => 'Person',
+          'name'  => $author,
+        ),
+        'headline'         => $wgTitle->getText(),
+        'dateCreated'      => $created_timestamp,
+        'datePublished'    => $created_timestamp,
+        'dateModified'     => $modified_timestamp,
+        'discussionUrl'    => $wgServer.'/'.$wgTitle->getTalkPage(),
+        'image'            => array(
+          '@type'  => 'ImageObject',
+          'url'    => $image_url,
+          'height' => $image_height,
+          'width'  => $image_width,
+        ),
+        'publisher'        => array(
+          '@type' => 'Organization',
+          'name'  => $wgSitename,
+          'logo'  => array(
+            '@type' => 'ImageObject',
+            'url'   => $wgServer.$wgLogo,
+          ),
+        ),
+        'description'      => $wgTitle->getText(),
+      );
+
       $out->addHeadItem(
           'GoogleRichCards',
-          '<script type="application/ld+json">
-          {
-             "@context": "http://schema.org",
-             "@type": "Article",
-             "mainEntityOfPage": {
-               "@type": "WebPage",
-               "@id": "'.$wgTitle->getFullURL().'"
-             },
-             "author": {
-               "@type": "Person",
-               "name": "'.$author.'"
-             },
-             "headline": "'.$wgTitle.'",
-             "dateCreated": "'.$created_timestamp.'",
-             "datePublished": "'.$created_timestamp.'",
-             "dateModified": "'.$modified_timestamp.'",
-             "discussionUrl": "'.$wgServer.'/'.$wgTitle->getTalkPage().'",
-             "image": {
-               "@type": "ImageObject",
-               "url": "'.$image_url.'",
-               "height": '.$image_height.',
-               "width": '.$image_width.'
-             },
-             "publisher": {
-               "@type": "Organization",
-               "name": "'.$wgSitename.'",
-               "logo": {
-                 "@type": "ImageObject",
-                 "url": "'.$wgServer.$wgLogo.'"
-               }
-             },
-             "description": "'.$wgTitle->getText().'"
-           }
-           </script>');
+          '<script type="application/ld+json">'.json_encode($article).'</script>');
          }
 }
 
