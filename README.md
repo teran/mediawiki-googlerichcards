@@ -46,5 +46,5 @@ The extension adds Google Rich Card JSON-LD metadata to each "content page" of y
 # Installation
 
 ```
-require_once "$IP/extensions/GoogleRichCards/GoogleRichCardsArticle.php";
+wfLoadExtension('GoogleRichCards');
 ```
