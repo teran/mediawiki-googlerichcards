@@ -10,7 +10,7 @@
  * @author   Igor Shishkin <me@teran.ru>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     https://github.com/teran/mediawiki-GoogleRichCards
- * */
+ */
 $wgExtensionCredits['validextensionclass'][] = array(
   'name' => 'GoogleRichCards',
   'author' =>'Igor Shishkin',
