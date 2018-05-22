@@ -15,7 +15,7 @@
 namespace MediaWiki\Extension\GoogleRichCards;
 
 use OutputPage;
-// use Parser;
+use Parser;
 use Skin;
 
 class Hooks {
@@ -27,10 +27,36 @@ class Hooks {
 	 * @return bool
 	 */
   public static function onBeforePageDisplay(OutputPage &$out, Skin &$skin) {
-    $article = Article::getInstance();
-    $article->render($out);
+    global $wgGoogleRichCardsAnnotateArticles, $wgGoogleRichCardsAnnotateEvents;
+
+    if($wgGoogleRichCardsAnnotateArticles) {
+      $article = Article::getInstance();
+      $article->render($out);
+    }
+
+    if($wgGoogleRichCardsAnnotateEvents) {
+      $event = Event::getInstance();
+      $event->render($out);
+    }
+
     return true;
   }
+
+  /**
+   * Handle invocation of article parser
+   *
+   * @link https://www.mediawiki.org/wiki/Manual:Hooks/ParserFirstCallInit
+   * @param Parser &$parser The global parser.
+   */
+  public static function onParserFirstCallInit(Parser &$parser) {
+    global $wgGoogleRichCardsAnnotateEvents;
+
+    if($wgGoogleRichCardsAnnotateEvents) {
+      $event = Event::getInstance();
+      $parser->setHook('event', [$event, 'parse']);
+    }
+  }
+
 }
 
 ?>

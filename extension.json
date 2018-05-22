@@ -14,10 +14,12 @@
 	},
 	"AutoloadClasses": {
 		"MediaWiki\\Extension\\GoogleRichCards\\Hooks": "Hooks.php",
-		"MediaWiki\\Extension\\GoogleRichCards\\Article": "Article.php"
+		"MediaWiki\\Extension\\GoogleRichCards\\Article": "Article.php",
+		"MediaWiki\\Extension\\GoogleRichCards\\Event": "Event.php"
 	},
 	"Hooks": {
-    "BeforePageDisplay": "MediaWiki\\Extension\\GoogleRichCards\\Hooks::onBeforePageDisplay"
+		"BeforePageDisplay": "MediaWiki\\Extension\\GoogleRichCards\\Hooks::onBeforePageDisplay",
+		"ParserFirstCallInit": "MediaWiki\\Extension\\GoogleRichCards\\Hooks::onParserFirstCallInit"
 	},
 	"manifest_version": 2
 }
