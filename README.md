@@ -57,6 +57,9 @@ wfLoadExtension('GoogleRichCards');
 
 // Enable annotations for articles
 $wgGoogleRichCardsAnnotateArticles = true;
+
+// Enable annotations for events
+$wgGoogleRichCardsAnnotateEvents = true;
 ```
 
 ### Template:Event
