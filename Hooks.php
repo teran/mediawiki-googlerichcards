@@ -27,7 +27,7 @@ class Hooks {
 	 * @return bool
 	 */
   public static function onBeforePageDisplay(OutputPage &$out, Skin &$skin) {
-    global $wgGoogleRichCardsAnnotateArticles, $wgGoogleRichCardsAnnotateEvents;
+    global $wgGoogleRichCardsAnnotateArticles, $wgGoogleRichCardsAnnotateEvents, $wgGoogleRichCardsAnnotateWebSite;
 
     if($wgGoogleRichCardsAnnotateArticles) {
       $article = Article::getInstance();
@@ -37,6 +37,11 @@ class Hooks {
     if($wgGoogleRichCardsAnnotateEvents) {
       $event = Event::getInstance();
       $event->render($out);
+    }
+
+    if($wgGoogleRichCardsAnnotateWebSite) {
+      $website = WebSite::getInstance();
+      $website->render($out);
     }
 
     return true;

@@ -60,6 +60,9 @@ $wgGoogleRichCardsAnnotateArticles = true;
 
 // Enable annotations for events
 $wgGoogleRichCardsAnnotateEvents = true;
+
+// Enable WebSite annotations
+$wgGoogleRichCardsAnnotateWebSite = true;
 ```
 
 ### Template:Event
