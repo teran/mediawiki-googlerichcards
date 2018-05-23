@@ -67,7 +67,22 @@ $wgGoogleRichCardsAnnotateWebSite = true;
 
 ### Template:Event
 ```
-<event name="{{{name}}}" startDate="{{{startDate}}}" endDate="{{{endDate}}}" place="{{{place}}}" description="{{{description}}}" postalCode="{{{postalCode}}}" locality="{{{locality}}}" region="{{{region}}}" country="{{{country}}}" performer="{{{performer}}}" />
+== Event ==
+=== {{{name}}}
+
+{{{description}}}
+
+
+Date: {{{startDate}}}
+
+Place: {{{place}}}
+
+Address: {{{streetAddress}}}
+
+Performer: {{{performer}}}
+
+
+<event name="{{{name}}}" startDate="{{{startDate}}}" endDate="{{{endDate}}}" place="{{{place}}}" description="{{{description}}}" postalCode="{{{postalCode}}}" locality="{{{locality}}}" region="{{{region}}}" country="{{{country}}}" performer="{{{performer}}}" streetaddress="{{{streetAddress}}}" offer="{{{offer}}}" offerURL="{{{offerURL}}}" offerPrice="{{{offerPrice}}}" offerCurrency="{{{offerCurrency}}}" offerAvailability="{{{offerAvailability}}}" validFrom="{{{validFrom}}}" />
 ```
 
 Please note, you're free to update this template in order to setup events publishing in your own flavour
