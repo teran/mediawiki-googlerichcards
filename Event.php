@@ -62,6 +62,7 @@ class Event {
            'startDate'   => $e->{'startdate'},
            'endDate'     => $e->{'enddate'},
            'description' => $e->{'description'},
+           'image'       => $e->{'image'},
         );
 
         if($e->{'place'}) {
