@@ -62,7 +62,7 @@ class Event {
            'startDate'   => $e->{'startdate'},
            'endDate'     => $e->{'enddate'},
            'description' => $e->{'description'},
-           'image'       => $e->{'image'},
+           'image'       => $this->getRawURL($e->{'image'}),
         );
 
         if($e->{'place'}) {
@@ -88,7 +88,7 @@ class Event {
           if($e->{'offer'}) {
             $event['offers'] = array(
               '@type'         => 'Offer',
-              'url'           => $e->{'offerurl'},
+              'url'           => $this->getRawURL($e->{'offerurl'}),
               'price'         => $e->{'offerprice'},
               'priceCurrency' => $e->{'offercurrency'},
               'availability'  => $e->{'offeravailability'},
@@ -109,7 +109,13 @@ class Event {
 		$matches = preg_match_all('/<!-- EventData:(\{(.*)\}) -->/m', $pageText, $extracted);
 
 		return $extracted[1];
-	}
+  }
+  
+  private function getRawURL($htmlLink) {
+    $matches = preg_match_all('/((https?:\\/\\/)([a-z0-9\.\/_-]+))/i', $htmlLink, $extracted);
+
+    return $extracted[0][0];
+  }
 }
 
 ?>
