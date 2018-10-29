@@ -69,5 +69,12 @@ Please note, you're free to update this template in order to setup events publis
 |region=District of Volokolamsk
 |streetAddress=95th km of Novorizhskoe highway (М9)
 |country=RU
+|offerAvailability=InStock
+|performer=Some awesome person
+|offerPrice=5
+|offerCurrency=USD
+|offerURL=http://example.com/test-event
+|image=http://example.com/logo.png
+|validFrom=2018-06-01T10:00+03:00
 }}
 ```

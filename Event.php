@@ -58,10 +58,10 @@ class Event {
         $event = array(
            '@context'    => 'http://schema.org',
            '@type'       => 'Event',
-           'name'        => $e->{'name'},
-           'startDate'   => $e->{'startdate'},
-           'endDate'     => $e->{'enddate'},
-           'description' => $e->{'description'},
+           'name'        => $this->getMetadataField($e, 'name', 'name'),
+           'startDate'   => $this->getMetadataField($e, 'startDate', 'startdate'),
+           'endDate'     => $this->getMetadataField($e, 'endDate', 'enddate'),
+           'description' => $this->getMetadataField($e, 'description', 'description'),
            'image'       => $this->getRawURL($e->{'image'}),
         );
 
@@ -70,11 +70,11 @@ class Event {
             '@type' => 'Place',
             'name'  => $e->{'place'},
             'address' => array(
-              'streetAddress'   => $e->{'streetaddress'},
-              'addressLocality' => $e->{'locality'},
-              'postalCode'      => $e->{'postalcode'},
-              'addressRegion'   => $e->{'region'},
-              'addressCountry'  => $e->{'country'},
+              'streetAddress'   => $this->getMetadataField($e, 'streetAddress', 'streetaddress'),
+              'addressLocality' => $this->getMetadataField($e, 'addressLocality', 'locality'),
+              'postalCode'      => $this->getMetadataField($e, 'postalCode', 'postalcode'),
+              'addressRegion'   => $this->getMetadataField($e, 'addressRegion', 'region'),
+              'addressCountry'  => $this->getMetadataField($e, 'addressCountry', 'country'),
             ),
           );
         }
@@ -82,17 +82,17 @@ class Event {
         if($e->{'performer'}) {
           $event['performer'] = array(
             '@type'   => 'PerformingGroup',
-            'name'    => $e->{'performer'},
+            'name'    => $this->getMetadataField($e, 'performer', 'performer'),
           );
 
           if($e->{'offer'}) {
             $event['offers'] = array(
               '@type'         => 'Offer',
               'url'           => $this->getRawURL($e->{'offerurl'}),
-              'price'         => $e->{'offerprice'},
-              'priceCurrency' => $e->{'offercurrency'},
-              'availability'  => $e->{'offeravailability'},
-              'validFrom'     => $e->{'validfrom'},
+              'price'         => $this->getMetadataField($e, 'offerPrice', 'offerprice'),
+              'priceCurrency' => $this->getMetadataField($e, 'offerCurrency', 'offercurrency'),
+              'availability'  => $this->getItemAvailability($e->{'offeravailability'}),
+              'validFrom'     => $this->getMetadataField($e, 'validFrom', 'validfrom'),
             );
           }
         }
@@ -115,6 +115,38 @@ class Event {
     $matches = preg_match_all('/((https?:\\/\\/)([a-z0-9\.\/_-]+))/i', $htmlLink, $extracted);
 
     return $extracted[0][0];
+  }
+
+  private function getItemAvailability($value) {
+    switch ($value) {
+      case "Discontinued":
+        return "http://schema.org/Discontinued";
+      case "InStock":
+        return "http://schema.org/InStock";
+      case "InStoreOnly":
+        return "http://schema.org/InStoreOnly";
+      case "LimitedAvailability":
+        return "http://schema.org/LimitedAvailability";
+      case "OnlineOnly":
+        return "http://schema.org/OnlineOnly";
+      case "OutOfStock":
+        return "http://schema.org/OutOfStock";
+      case "PreOrder":
+        return "http://schema.org/PreOrder";
+      case "PreSale":
+        return "http://schema.org/PreSale";
+      case "SoldOut":
+        return "http://schema.org/SoldOut";
+    }
+    return "";
+  }
+
+  private function getMetadataField($obj, $field, $name) {
+    $value = $obj->{$name};
+    if ($value == '{{{'.$field.'}}}') {
+      return "";
+    }
+    return $value;
   }
 }
 
