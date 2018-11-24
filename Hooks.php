@@ -38,6 +38,12 @@ class Hooks {
       $event = Event::getInstance();
       $event->render($out);
     }
+      
+    if($wgGoogleRichCardsAnnotateBooks) {
+      $book = Event::getInstance();
+      $book->render($out);
+        
+    }
 
     if($wgGoogleRichCardsAnnotateWebSite) {
       $website = WebSite::getInstance();
@@ -61,6 +67,15 @@ class Hooks {
       $parser->setHook('event', [$event, 'parse']);
     }
   }
+
+ /*   public static function onParserFirstCallInit(Parser &$parser) {
+        global $wgGoogleRichCardsAnnotateBooks;
+        
+        if($wgGoogleRichCardsAnnotateBooks) {
+            $book = Event::getInstance();
+            $parser->setHook('book', [$book, 'parse']);
+        }
+    }*/
 
 }
 

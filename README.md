@@ -29,6 +29,9 @@ $wgGoogleRichCardsAnnotateArticles = true;
 // Enable annotations for events
 $wgGoogleRichCardsAnnotateEvents = true;
 
+// Enable annotations for books
+$wgGoogleRichCardsAnnotateBooks = true;
+
 // Enable WebSite annotations
 $wgGoogleRichCardsAnnotateWebSite = true;
 ```
@@ -55,7 +58,22 @@ Performer: {{{performer}}}
 
 Please note, you're free to update this template in order to setup events publishing in your own flavour
 
-### Usage of Event template
+### Template:Book
+```
+
+### Usage of book template
+
+== Livre ==
+=== {{{name}}} ===
+
+{{{description}}}
+
+
+
+auteur: {{{author}}}
+
+
+<book name="{{{name}}}" place="{{{place}}}" description="{{{description}}}" postalCode="{{{postalCode}}}" locality="{{{locality}}}" region="{{{region}}}" country="{{{country}}}" author="{{{author}}}" streetaddress="{{{streetAddress}}}" offer="{{{offer}}}" offerURL="{{{offerURL}}}" offerPrice="{{{offerPrice}}}" offerCurrency="{{{offerCurrency}}}" offerAvailability="{{{offerAvailability}}}" validFrom="{{{validFrom}}}" image="{{{image}}} />
 
 ```
 {{Event
@@ -75,6 +93,26 @@ Please note, you're free to update this template in order to setup events publis
 |offerCurrency=USD
 |offerURL=http://example.com/test-event
 |image=http://example.com/logo.png
+|validFrom=2018-06-01T10:00+03:00
+}}
+```
+
+### Usage of Event template
+```
+{{Book
+|name=La reconstruction de la ville de Valenciennes (1940-1959)
+|place=Valenciennes
+|description=Après l'incendie du 22 mai 1940, Valenciennes située en zone interdite est sous la tutelle de l'Autorité administrative allemande. André Muffang, Commissaire à la Reconstruction, désigne Valenciennes comme l'une des premières villes sinistrées à reconstruire. Le plan de reconstruction de la ville et l'aménagement de son agglomération est établi sous Vichy par l'éminent architecte-urbaniste Albert Laprade. Il est reconnu d'utilité publique le 24 juin 1943 et vise à consacrer la ville comme capitale du Hainaut afin d'en faire, à terme le centre d'un nouveau département. Ce plan ne sera pas remis en question après guerre.
+|postalCode=000000
+|locality=Valenciennes
+|region=Haut de France
+|country=Fr
+|offerAvailability=InStock
+|author=Jean-Marie Richez
+|offerPrice=26
+|offerCurrency=EUR
+|offerURL=http://www.histoire-valenciennes-cahv.fr/index.php?title=La_reconstruction_de_la_ville_de_Valenciennes_(1940-1959)
+|image=http://www.histoire-valenciennes-cahv.fr/Memoires/public/journals/1/cover_issue_60_fr_CA.jpg
 |validFrom=2018-06-01T10:00+03:00
 }}
 ```
