@@ -27,7 +27,7 @@ class Hooks {
 	 * @return bool
 	 */
   public static function onBeforePageDisplay(OutputPage &$out, Skin &$skin) {
-    global $wgGoogleRichCardsAnnotateArticles, $wgGoogleRichCardsAnnotateEvents, $wgGoogleRichCardsAnnotateWebSite;
+    global $wgGoogleRichCardsAnnotateArticles, $wgGoogleRichCardsAnnotateEvents, $wgGoogleRichCardsAnnotateBooks, $wgGoogleRichCardsAnnotateWebSite;
 
     if($wgGoogleRichCardsAnnotateArticles) {
       $article = Article::getInstance();
@@ -66,16 +66,16 @@ class Hooks {
       $event = Event::getInstance();
       $parser->setHook('event', [$event, 'parse']);
     }
-  }
+  
 
- /*   public static function onParserFirstCallInit(Parser &$parser) {
+  /*  public static function onParserFirstCallInit(Parser &$parser) {*/
         global $wgGoogleRichCardsAnnotateBooks;
         
         if($wgGoogleRichCardsAnnotateBooks) {
             $book = Event::getInstance();
             $parser->setHook('book', [$book, 'parse']);
         }
-    }*/
+    }
 
 }
 

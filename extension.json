@@ -16,6 +16,7 @@
 		"MediaWiki\\Extension\\GoogleRichCards\\Hooks": "Hooks.php",
 		"MediaWiki\\Extension\\GoogleRichCards\\Article": "Article.php",
 		"MediaWiki\\Extension\\GoogleRichCards\\Event": "Event.php",
+        "MediaWiki\\Extension\\GoogleRichCards\\Book": "Book.php",
 		"MediaWiki\\Extension\\GoogleRichCards\\WebSite": "WebSite.php"
 	},
 	"Hooks": {
