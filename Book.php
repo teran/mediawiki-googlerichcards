@@ -7,7 +7,7 @@
  *
  * @category Extension
  * @package  GoogleRichCards
- * @author   Igor Shishkin <me@teran.ru>
+ * @author   Benjamin Leduc <giby_the_kid@yahoo.fr>
  * @license  GPL http://www.gnu.org/licenses/gpl.html
  * @link     https://github.com/teran/mediawiki-GoogleRichCards
  */
