@@ -160,8 +160,8 @@ class Article {
         'image'            => array(
           '@type'  => 'ImageObject',
           'url'    => $image[0],
-          'height' => $image_height[2],
-          'width'  => $image_width[1],
+          'height' => $image[2],
+          'width'  => $image[1],
         ),
         'publisher'        => array(
           '@type' => 'Organization',
