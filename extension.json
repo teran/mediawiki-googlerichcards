@@ -5,10 +5,10 @@
 		"Igor Shishkin"
 	],
 	"url": "https://github.com/teran/mediawiki-GoogleRichCards",
-	"descriptionmsg": "Google Rich Cards extension",
+	"description": "Google Rich Cards extension",
 	"license-name": "GPL",
 	"type": "parserhook",
-  "MessagesDirs": {},
+	"MessagesDirs": {},
 	"requires": {
 		"MediaWiki": ">= 1.29.0"
 	},
