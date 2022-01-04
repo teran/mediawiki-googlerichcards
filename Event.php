@@ -63,19 +63,74 @@ class Event {
            'endDate'     => $this->getMetadataField($e, 'endDate', 'enddate'),
            'description' => $this->getMetadataField($e, 'description', 'description'),
            'image'       => $this->getRawURL($e->{'image'}),
+           'eventAttendanceMode' => $this->getItemAvailability($e->{'attendancemode'}),
+           'eventStatus' => $this->getItemAvailability($e->{'eventstatus'}),           
         );
 
-        if($e->{'place'}) {
-          $event['location'] = array(
-            '@type' => 'Place',
-            'name'  => $e->{'place'},
-            'address' => array(
-              'streetAddress'   => $this->getMetadataField($e, 'streetAddress', 'streetaddress'),
-              'addressLocality' => $this->getMetadataField($e, 'addressLocality', 'locality'),
-              'postalCode'      => $this->getMetadataField($e, 'postalCode', 'postalcode'),
-              'addressRegion'   => $this->getMetadataField($e, 'addressRegion', 'region'),
-              'addressCountry'  => $this->getMetadataField($e, 'addressCountry', 'country'),
-            ),
+        switch ($e->{'attendancemode'}) {
+          case "MixedEventAttendanceMode":
+            if($e->{'place'}) {
+              $event['location'] = array(
+                $v['online'] = array(
+                  '@type' => "VirtualLocation",
+                  'url'   => $this->getRawURL($e->{'virtualvendorurl'}),
+                ),
+                $p['offline'] = array(
+                  '@type' => 'Place',
+                  'name'  => $e->{'place'},
+                  'address' => array(
+                    'streetAddress'   => $this->getMetadataField($e, 'streetAddress', 'streetaddress'),
+                    'addressLocality' => $this->getMetadataField($e, 'addressLocality', 'locality'),
+                    'postalCode'      => $this->getMetadataField($e, 'postalCode', 'postalcode'),
+                    'addressRegion'   => $this->getMetadataField($e, 'addressRegion', 'region'),
+                    'addressCountry'  => $this->getMetadataField($e, 'addressCountry', 'country'),
+                  ),
+                ),
+              );                
+            };
+            break;
+          case "OfflineEventAttendanceMode":
+            if($e->{'place'}) {
+              $event['location'] = array(
+                '@type' => 'Place',
+                'name'  => $e->{'place'},
+                'address' => array(
+                  'streetAddress'   => $this->getMetadataField($e, 'streetAddress', 'streetaddress'),
+                  'addressLocality' => $this->getMetadataField($e, 'addressLocality', 'locality'),
+                  'postalCode'      => $this->getMetadataField($e, 'postalCode', 'postalcode'),
+                  'addressRegion'   => $this->getMetadataField($e, 'addressRegion', 'region'),
+                  'addressCountry'  => $this->getMetadataField($e, 'addressCountry', 'country'),
+                ),
+              );
+            };
+            break;
+          case "OnlineEventAttendanceMode":
+            if($e->{'virtualvendorurl'}) {
+              $event['location'] = array(
+                '@type' => "VirtualLocation",
+                'url'   => $this->getRawURL($e->{'virtualvendorurl'}),
+              );
+            };
+            break;
+          default:
+            echo "Error, attendence mode not set";
+        }
+
+        if($e->{'contributor'}) {
+          $event['contributor'] = array(
+            '@type'         => 'Person',
+            'name'          => $this->getMetadataField($e, 'name', 'contributor'),
+            'url'           => $this->getRawURL($e->{'contributor_url'}),
+            'sameAs'        => $this->getRawURL($e->{'contributor_sameas'}),
+            'award'         => $this->getMetadataField($e, 'award', 'contributor_award'),
+          );
+        }
+
+        if($e->{'organizer'}) {
+          $event['organizer'] = array(
+            '@type'   => 'Organization',
+            'name'    => $this->getMetadataField($e, 'organizer', 'organizer'),
+            'url'     => $this->getRawURL($e->{'organizer_url'}),
           );
         }
 
@@ -83,20 +138,22 @@ class Event {
           $event['performer'] = array(
             '@type'   => 'PerformingGroup',
             'name'    => $this->getMetadataField($e, 'performer', 'performer'),
+            'url'     => $this->getRawURL($e->{'performer_url'}),
+            'sameAs'        => $this->getRawURL($e->{'performer_sameas'}),
           );
-
-          if($e->{'offer'}) {
-            $event['offers'] = array(
-              '@type'         => 'Offer',
-              'url'           => $this->getRawURL($e->{'offerurl'}),
-              'price'         => $this->getMetadataField($e, 'offerPrice', 'offerprice'),
-              'priceCurrency' => $this->getMetadataField($e, 'offerCurrency', 'offercurrency'),
-              'availability'  => $this->getItemAvailability($e->{'offeravailability'}),
-              'validFrom'     => $this->getMetadataField($e, 'validFrom', 'validfrom'),
-            );
-          }
         }
 
+        if($e->{'offer'}) {
+          $event['offers'] = array(
+            '@type'         => 'Offer',
+            'url'           => $this->getRawURL($e->{'offerurl'}),
+            'price'         => $this->getMetadataField($e, 'offerPrice', 'offerprice'),
+            'priceCurrency' => $this->getMetadataField($e, 'offerCurrency', 'offercurrency'),
+            'availability'  => $this->getItemAvailability($e->{'offeravailability'}),
+            'validFrom'     => $this->getMetadataField($e, 'validFrom', 'validfrom'),
+          );
+        }
+      
         $out->addHeadItem(
           'GoogleRichCardsEvent_'.$e->{'name'},
           '<script type="application/ld+json">'.json_encode($event).'</script>'
@@ -119,6 +176,7 @@ class Event {
 
   private function getItemAvailability($value) {
     switch ($value) {
+      /*offer availability enumerations */
       case "Discontinued":
         return "http://schema.org/Discontinued";
       case "InStock":
@@ -137,10 +195,27 @@ class Event {
         return "http://schema.org/PreSale";
       case "SoldOut":
         return "http://schema.org/SoldOut";
+      /* eventAttendanceMode enumerations */
+      case "MixedEventAttendanceMode":
+        return "http://schema.org/MixedEventAttendanceMode";
+      case "OfflineEventAttendanceMode":
+        return "http://schema.org/OfflineEventAttendanceMode";
+      case "OnlineEventAttendanceMode":
+        return "http://schema.org/OnlineEventAttendanceMode";
+      /* eventStatus enumerations */
+      case "EventCancelled":
+        return "http://schema.org/EventCancelled";
+      case "EventMovedOnline":
+        return "http://schema.org/EventMovedOnline";
+      case "EventPostponed":
+        return "http://schema.org/EventPostponed";
+      case "EventRescheduled":
+        return "http://schema.org/EventRescheduled";
+      case "EventScheduled":
+        return "http://schema.org/EventScheduled";
     }
     return "";
   }
-
   private function getMetadataField($obj, $field, $name) {
     $value = $obj->{$name};
     if ($value == '{{{'.$field.'}}}') {
